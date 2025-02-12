@@ -3,11 +3,11 @@ export const typeOptions = [
   { value: "fire", label: "Fire" },
   { value: "water", label: "Water" },
   { value: "grass", label: "Grass" },
-  { value: "electric", label: "Electric" },
-  { value: "psychic", label: "Psychic" },
-  { value: "rock", label: "Rock" },
-  { value: "ground", label: "Ground" },
+  { value: "bug", label: "Bug" },
   { value: "flying", label: "Flying" },
+  { value: "normal", label: "Normal" },
+  { value: "poison", label: "Poison" },
+  { value: "grass", label: "Grass" },
 ];
 
 export  const sortOptions = [

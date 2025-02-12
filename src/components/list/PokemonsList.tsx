@@ -18,13 +18,26 @@ import Spinner from '../loading/Spinner';
  * 
 */
 const PokemonsList: React.FC<{loadingNextPokemons: boolean}> = ({loadingNextPokemons}: {loadingNextPokemons: boolean}) => {
-  const { paginatedPokemons, filterByType, sortPokemons } = usePokemonContext();
+  const { paginatedPokemons, filterByType, sortPokemons, searchAttackPokemons, searchPokemons} = usePokemonContext();
 
   //RENDER
   return (
     <div className="mx-auto p-6 bg-white rounded-lg shadow-md">
       {/* Barre de recherche */}
-      <SearchInput />
+
+      <div className="flex gap-4 mb-4">
+      <SearchInput 
+        placeholder='Search by name...'
+        className="border rounded-lg p-2 flex-1"
+        onChange={searchPokemons}
+      />
+      <SearchInput 
+        placeholder='Filter by attack power...'
+        className="border rounded-lg p-2 flex-1"
+        type="number" 
+        onChange={searchAttackPokemons}
+      />
+      </div>
 
       <div className="flex gap-4 mb-4">
         {/* Filtrage par type */}

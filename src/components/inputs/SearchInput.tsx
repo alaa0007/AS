@@ -1,5 +1,11 @@
 import React from 'react'
-import usePokemonContext from '../../hooks/usePokemonContext';
+
+interface InputProps {
+  onChange:  (value: string | number) => void;
+  className?: string;
+  placeholder?: string;
+  type?: "text" | "number";
+}
 
 /**
  * A functional component that renders an input field to search for
@@ -9,21 +15,16 @@ import usePokemonContext from '../../hooks/usePokemonContext';
  *
  * @returns A JSX element representing the search input field.
  */
-const SearchInput: React.FC = () => {
-
-  //HOOKS
-  const { searchPokemons }= usePokemonContext();
+const SearchInput: React.FC<InputProps>= ({onChange, className, placeholder, type}) => {
 
   //RENDER
   return (
-    <div className="flex gap-4 mb-4">
-      <input
-        type="text"
-        placeholder="Search Pokémon..."
-        onChange={(e) => searchPokemons(e.target.value)}
-        className="border rounded-lg p-2 flex-1"
-      />
-  </div>
+    <input
+      type={type ?? "text"}
+      placeholder={placeholder ?? "Search pokemons..."}
+      onChange={(e) => onChange(e.target.value)}
+      className={className ?? "border rounded-lg p-2 flex-1"}
+    />
   )
 }
 

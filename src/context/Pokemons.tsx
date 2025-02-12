@@ -5,6 +5,7 @@ interface PokemonsContextType {
   paginatedPokemons: Pokemon[];
   setPokemons: (data: Pokemon[]) => void;
   searchPokemons: (query: string) => void;
+  searchAttackPokemons: (query: number) => void;
   filterByType: (type: string) => void;
   sortPokemons: (stat?: string) => void;
   nextPage: () => void;
@@ -15,11 +16,36 @@ interface PokemonsContextType {
 
 export const PokemonsContext = createContext<PokemonsContextType | undefined>(undefined);
 
-export const PokemonsProvider = ({ children }: { children: ReactNode }) => {
+/**
+ * A context provider component that manages the state and behavior of Pokémon data.
+ * 
+ * It provides functionalities to set, filter, sort, and paginate the list of Pokémon.
+ * The component uses React's context API to supply the Pokémon-related state and 
+ * functions to its children.
+ * 
+ * @param {{ children: ReactNode }} props The children components that require access
+ * to the Pokémon context.
+ * 
+ * @returns {JSX.Element} A provider component that wraps its children with the Pokémon context.
+ * 
+ * The context includes:
+ * - `paginatedPokemons`: The currently visible paginated list of Pokémon.
+ * - `setPokemons`: A function to set the list of Pokémon.
+ * - `searchPokemons`: A function to filter Pokémon by name.
+ * - `searchAttackPokemons`: A function to filter Pokémon by attack value.
+ * - `filterByType`: A function to filter Pokémon by type.
+ * - `sortPokemons`: A function to sort Pokémon by a specified stat.
+ * - `nextPage`: A function to navigate to the next page of Pokémon.
+ * - `prevPage`: A function to navigate to the previous page of Pokémon.
+ * - `currentPage`: The current page number in the pagination.
+ * - `totalPages`: The total number of pages available based on the paginated data.
+*/
+export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [pokemons, setPokemonsState] = useState<Pokemon[]>([]);
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchAttackQuery, setSearchAttackQuery] = useState<number>(0);
   const [selectedType, setSelectedType] = useState<string>("");
   const [sortStat, setSortStat] = useState<string>("name");
 
@@ -46,6 +72,13 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }) => {
       result = result.filter((pokemon) => pokemon.types?.includes(selectedType));
     }
 
+    if(searchAttackQuery) {
+      result = result.filter((pokemon) => {
+        const attackStat = pokemon.stats?.find((s) => s.name.toLowerCase() === "attack")?.value ?? 0;
+        return attackStat >= searchAttackQuery;
+      })
+    }
+
     result.sort((a, b) => {
       if (sortStat === "name") return a.name.localeCompare(b.name);
       const statA = a.stats?.find((s) => s.name.toLowerCase() === sortStat)?.value ?? 0;
@@ -55,7 +88,7 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }) => {
 
     setFilteredPokemons(result);
     setCurrentPage(1);
-  }, [pokemons, searchQuery, selectedType, sortStat]);
+  }, [pokemons, searchQuery, selectedType, sortStat, searchAttackQuery]);
 
   const totalPages = Math.ceil(filteredPokemons.length / itemsPerPage);
   const paginatedPokemons = filteredPokemons.slice(
@@ -84,6 +117,10 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }) => {
     setSearchQuery(query);
   };
 
+  const searchAttackPokemons = (query: number) => {
+    setSearchAttackQuery(query);
+  };
+
   // Définit le type sélectionné
   const filterByType = (type: string) => {
     setSelectedType(type);
@@ -101,6 +138,7 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }) => {
         paginatedPokemons,
         setPokemons,
         searchPokemons,
+        searchAttackPokemons,
         filterByType,
         sortPokemons,
         nextPage,

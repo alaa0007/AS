@@ -18,7 +18,7 @@ interface SelectProps {
  *
  * @returns {JSX.Element} A JSX element representing the select input.
 */
-const Select: React.FC<SelectProps> = ({ options, onChange, defaultValue, className }) => {
+const Select: React.FC<SelectProps> = ({ options, onChange, defaultValue, className }: SelectProps): JSX.Element => {
   //RENDER
   return (
     <select
