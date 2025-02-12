@@ -50,6 +50,8 @@ export default tseslint.config({
 ```
 # AS
 
-Clone the Project then 
+## how you can run the project =>
+git clone https://github.com/alaa0007/AS.git
+cd 'the file name' as
 npm i 
 npm run dev
