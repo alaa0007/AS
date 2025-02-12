@@ -41,6 +41,8 @@ export const PokemonsContext = createContext<PokemonsContextType | undefined>(un
  * - `totalPages`: The total number of pages available based on the paginated data.
 */
 export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Element => {
+  
+  //HOOKS
   const [pokemons, setPokemonsState] = useState<Pokemon[]>([]);
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
 
@@ -52,7 +54,10 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 21;
 
-  // Met à jour la liste des Pokémon
+  /**
+   * Sets the list of pokemons and resets the current page to 1.
+   * @param {Pokemon[]} data The new list of pokemons.
+  */
   const setPokemons = (data: Pokemon[]) => {
     setPokemonsState(data);
     setCurrentPage(1);
@@ -90,6 +95,7 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
     setCurrentPage(1);
   }, [pokemons, searchQuery, selectedType, sortStat, searchAttackQuery]);
 
+  // Pagination
   const totalPages = Math.ceil(filteredPokemons.length / itemsPerPage);
   const paginatedPokemons = filteredPokemons.slice(
     (currentPage - 1) * itemsPerPage,
@@ -112,21 +118,42 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-  // Définit la recherche
+  
+  /**
+   * Filters the list of pokemons by name.
+   * @param {string|number} query The name to filter by.
+   * If a number, it will filter pokemons with a name equal to the given number as a string.
+   * If a string, it will filter pokemons with a name containing the given string (case-insensitive).
+  */
   const searchPokemons = (query: string|number) => {
     setSearchQuery(query);
   };
 
+  /**
+   * Filter the list of pokemons by attack power.
+   * @param {number|string} query The attack power to filter by.
+   * If a number, it will filter pokemons with an attack power equal or greater than the given number.
+   * If a string, it will filter pokemons with an attack power containing the given string (case-insensitive).
+  */
   const searchAttackPokemons = (query: number|string) => {
     setSearchAttackQuery(query);
   };
 
-  // Définit le type sélectionné
+    
+  /**
+   * Filters the list of pokemons by their type.
+   * @param {string} type - The type to filter by. If empty, it resets the filter.
+  */
   const filterByType = (type: string) => {
     setSelectedType(type);
   };
 
-  // Définit le critère de tri
+  
+  /**
+   * Sorts the list of pokemons by the given stat.
+   * @param {string} [stat="name"] - The stat to sort by. If empty, it resets the sort order.
+   * The default is "name", which sorts the list alphabetically.
+  */
   const sortPokemons = (stat: string = "name") => {
     setSortStat(stat);
   };

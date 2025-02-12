@@ -7,7 +7,6 @@ export const typeOptions = [
   { value: "flying", label: "Flying" },
   { value: "normal", label: "Normal" },
   { value: "poison", label: "Poison" },
-  { value: "grass", label: "Grass" },
 ];
 
 export  const sortOptions = [
