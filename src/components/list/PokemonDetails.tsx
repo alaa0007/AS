@@ -16,7 +16,7 @@ const PokemonDetails: React.FC<{pokemon: Pokemon}> = ({pokemon}: {pokemon: Pokem
 
   //RENDER
   return (
-    <div className="mt-6 bg-white rounded-xl shadow-lg p-6 text-center max-w-md mx-auto">
+    <div className="mt-6 bg-white rounded-xl shadow-lg p-6 text-center max-w-md mx-auto hover:shadow-2xl transition duration-300">
       <h2 className="text-3xl font-bold text-gray-800">{pokemon.name.toUpperCase()}</h2>
 
       <img
