@@ -1,0 +1,12 @@
+//CONSTANTS FOR ENDPOINTS
+const GET_ALL_POKEMONS = '/api/v2/pokemon';
+
+
+
+//ENDPOINTS
+const POKEMONS_ENDPOINTS = {
+    GET_ALL_POKEMONS
+}
+
+//EXPORT
+export default POKEMONS_ENDPOINTS;
