@@ -4,7 +4,7 @@ interface InputProps {
   onChange:  (value: string | number) => void;
   className?: string;
   placeholder?: string;
-  type?: "text" | "number";
+  isNumber?: boolean
 }
 
 /**
@@ -15,14 +15,17 @@ interface InputProps {
  *
  * @returns A JSX element representing the search input field.
  */
-const SearchInput: React.FC<InputProps>= ({onChange, className, placeholder, type}) => {
+const SearchInput: React.FC<InputProps>= ({onChange, className, placeholder, isNumber}) => {
 
   //RENDER
   return (
     <input
-      type={type ?? "text"}
-      placeholder={placeholder ?? "Search pokemons..."}
-      onChange={(e) => onChange(e.target.value)}
+      type={isNumber ? "number" : "text"}
+      placeholder={placeholder ?? "Search..."}
+      onChange={(e) => {
+        const value: string | number = isNumber ? Number(e.target.value) || 0 : e.target.value;
+        onChange(value);
+      }}
       className={className ?? "border rounded-lg p-2 flex-1"}
     />
   )

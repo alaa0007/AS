@@ -4,8 +4,8 @@ import { Pokemon } from "../services/dto/response";
 interface PokemonsContextType {
   paginatedPokemons: Pokemon[];
   setPokemons: (data: Pokemon[]) => void;
-  searchPokemons: (query: string) => void;
-  searchAttackPokemons: (query: number) => void;
+  searchPokemons: (query: string|number) => void;
+  searchAttackPokemons: (query: number|string) => void;
   filterByType: (type: string) => void;
   sortPokemons: (stat?: string) => void;
   nextPage: () => void;
@@ -44,8 +44,8 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
   const [pokemons, setPokemonsState] = useState<Pokemon[]>([]);
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchAttackQuery, setSearchAttackQuery] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string|number>("");
+  const [searchAttackQuery, setSearchAttackQuery] = useState<number|string>(0);
   const [selectedType, setSelectedType] = useState<string>("");
   const [sortStat, setSortStat] = useState<string>("name");
 
@@ -64,7 +64,7 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
 
     if (searchQuery) {
       result = result.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
+        pokemon.name.toLowerCase().includes(searchQuery.toString().toLowerCase())
       );
     }
 
@@ -75,7 +75,7 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
     if(searchAttackQuery) {
       result = result.filter((pokemon) => {
         const attackStat = pokemon.stats?.find((s) => s.name.toLowerCase() === "attack")?.value ?? 0;
-        return attackStat >= searchAttackQuery;
+        return attackStat >= +searchAttackQuery;
       })
     }
 
@@ -113,11 +113,11 @@ export const PokemonsProvider = ({ children }: { children: ReactNode }): JSX.Ele
   };
 
   // Définit la recherche
-  const searchPokemons = (query: string) => {
+  const searchPokemons = (query: string|number) => {
     setSearchQuery(query);
   };
 
-  const searchAttackPokemons = (query: number) => {
+  const searchAttackPokemons = (query: number|string) => {
     setSearchAttackQuery(query);
   };
 

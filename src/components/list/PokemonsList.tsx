@@ -33,8 +33,8 @@ const PokemonsList: React.FC<{loadingNextPokemons: boolean}> = ({loadingNextPoke
       <SearchInput 
         placeholder='Filter by attack power...'
         className="border rounded-lg p-2 flex-1"
-        type="number" 
-        onChange={searchAttackPokemons}
+        isNumber={true} 
+        onChange={searchAttackPokemons} 
       />
       </div>
 
