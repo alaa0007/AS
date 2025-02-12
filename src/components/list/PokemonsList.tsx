@@ -24,7 +24,6 @@ const PokemonsList: React.FC<{loadingNextPokemons: boolean}> = ({loadingNextPoke
   return (
     <div className="mx-auto p-6 bg-white rounded-lg shadow-md">
       {/* Barre de recherche */}
-
       <div className="flex gap-4 mb-4">
       <SearchInput 
         placeholder='Search by name...'
