@@ -5,6 +5,8 @@ import usePokemonContext from '../hooks/usePokemonContext';
 import PokemonsList from '../components/list/PokemonsList';
 import Pagination from '../components/list/Pagination';
 import Spinner from '../components/loading/Spinner';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const LIMIT = 21;
 
@@ -83,11 +85,7 @@ const PokemonsPage: React.FC = () => {
 
   return (
     <div>
-      <div className="bg-gradient-to-r from-gray-500 to-dark-600 py-4 shadow-md">
-        <h1 className="text-3xl font-bold text-white text-center">
-          Pokémon List 🚀
-        </h1>
-      </div>
+      <Header />
 
       <div>
       {
@@ -106,6 +104,7 @@ const PokemonsPage: React.FC = () => {
         isPrevious={offset === 0 && currentPage === 1}
         isNext={!(data?.pokemons.length === LIMIT) && currentPage === totalPages}
       />
+      <Footer />
     </div>
   );
 };
