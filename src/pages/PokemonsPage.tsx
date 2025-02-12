@@ -5,35 +5,22 @@ import usePokemonContext from '../hooks/usePokemonContext';
 import PokemonsList from '../components/list/PokemonsList';
 import Pagination from '../components/list/Pagination';
 
-
-const LIMIT=21;
+const LIMIT = 21;
 
 /**
- * The PokemonsPage is a React component that displays a paginated list of Pokemon.
- * 
- * It uses the useQuery hook from @tanstack/react-query to fetch the list of Pokemon
- * from the Pokemon API. The component also implements a pagination feature to
- * navigate to the next and previous pages.
- * 
- * If the data is loading, the component displays a "Loading..." message.
- * If there is an error loading the data, the component displays an "Error loading data" message.
- * 
- * The component also uses the usePokemonContext hook to store the list of Pokemon in the context.
- * 
- * The component renders a list of Pokemon, a div with the title "Pokémon List (Page X)" and a Pagination component.
- * The Pagination component is used to navigate to the next and previous pages.
- * 
- * The component implements the following features:
- * - Fetches the list of Pokemon from the Pokemon API.
- * - Implements pagination to navigate to the next and previous pages.
- * - Displays a "Loading..." message while the data is loading.
- * - Displays an "Error loading data" message if there is an error loading the data.
- * - Stores the list of Pokemon in the context using the usePokemonContext hook.
+ * The PokemonsPage component fetches the list of pokemons from the API,
+ * and displays it using the PokemonsList component. It also renders a
+ * Pagination component to navigate between pages. The component uses
+ * the usePokemonContext hook to access the pokemon context, and the
+ * useQuery hook to fetch the pokemon data from the API. The data is
+ * cached for 5 minutes to avoid unnecessary requests.
+ *
+ * @returns A JSX element representing the PokemonsPage component.
 */
 const PokemonsPage: React.FC = () => {
   //HOOKS
   const [offset, setOffset] = useState(0);
-  const { setPokemons } = usePokemonContext();
+  const { setPokemons, nextPage, prevPage, currentPage, totalPages } = usePokemonContext();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemons", offset],
@@ -41,7 +28,7 @@ const PokemonsPage: React.FC = () => {
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
   });
-  
+
   useEffect(() => {
     if (data?.pokemons) {
       setPokemons(data.pokemons);
@@ -49,20 +36,35 @@ const PokemonsPage: React.FC = () => {
   }, [data, setPokemons]);
 
   /**
-   * Navigates to the next page if `nextOffset` is available.
+   * Function to handle the click event on the "Next" button.
+   * If there are more pages available, it calls the nextPage
+   * function to update the context. Otherwise, it updates the
+   * offset to fetch the next page from the API.
   */
-  const nextPokemonList = () => {
-    if (data && data?.nextOffset !== null) {
-      setOffset(data.nextOffset);
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      nextPage();
+    } else {
+      setOffset((prev) => prev + LIMIT);
     }
   };
 
   /**
-   * Navigates to the previous page.
+   * Handles the click event on the "Previous" button.
+   * If there are previous pages available in the context,
+   * it calls the prevPage function to update the context.
+   * Otherwise, it updates the offset to fetch the previous 
+   * page from the API, ensuring the offset does not go below zero.
   */
-  const previousPokemonList = () => {
-    setOffset((prev) => Math.max(prev - LIMIT, 0));
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+
+      prevPage();
+    } else {
+      setOffset((prev) => Math.max(prev - LIMIT, 0));
+    }
   };
+
 
   //RENDER
   return (
@@ -80,11 +82,11 @@ const PokemonsPage: React.FC = () => {
         <PokemonsList />
       </div>
 
-      <Pagination 
-        previousPokemonList={previousPokemonList} 
-        nextPokemonList={nextPokemonList} 
-        isPrevious={offset === 0} 
-        isNext={data?.nextOffset == null} 
+      <Pagination
+        previousPokemonList={handlePrevPage}
+        nextPokemonList={handleNextPage}
+        isPrevious={offset === 0 && currentPage === 1}
+        isNext={!(data?.pokemons.length === LIMIT) && currentPage === totalPages}
       />
     </div>
   );

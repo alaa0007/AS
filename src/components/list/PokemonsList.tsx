@@ -14,7 +14,7 @@ import PokemonDetails from './PokemonDetails';
  * 
 */
 const PokemonsList: React.FC= () => {
-  const { filteredPokemons, searchPokemons, filterByType, sortPokemons } = usePokemonContext();
+  const { paginatedPokemons, searchPokemons, filterByType, sortPokemons } = usePokemonContext();
 
   //RENDER
   return (
@@ -53,13 +53,22 @@ const PokemonsList: React.FC= () => {
           <option value="speed">Sort by Speed</option>
         </select>
       </div>
+      {
+        paginatedPokemons.length === 0 ? (
+          <div className="w-full text-center">
+            <p className="text-gray-500">No Pokemons found for this filter in this page</p>
+          </div>
+        ) : null
+      }
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {filteredPokemons?.map((pokemon: Pokemon) => (
-          <li key={pokemon.name} className="flex justify-center">
-            <PokemonDetails pokemon={pokemon} />
-          </li>
-        ))}
+        {
+          paginatedPokemons?.map((pokemon: Pokemon) => (
+            <li key={pokemon.name} className="flex justify-center">
+              <PokemonDetails pokemon={pokemon} />
+            </li>
+          ))
+        }
       </ul>
     </div>
   )

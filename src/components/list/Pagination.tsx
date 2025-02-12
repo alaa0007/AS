@@ -8,19 +8,22 @@ type PaginationProps = {
 };
 
 /**
- * Pagination component for navigating through pages of Pokémon lists.
+ * A React component that renders a pagination component.
  *
- * @param {Object} props - The properties object.
- * @param {boolean} props.isNext - Indicates if the next page is available.
- * @param {boolean} props.isPrevious - Indicates if the previous page is available.
- * @param {Function} props.nextPokemonList - Function to navigate to the next page.
- * @param {Function} props.previousPokemonList - Function to navigate to the previous page.
+ * @param {{ isNext: boolean; isPrevious: boolean; nextPokemonList: () => void; previousPokemonList: () => void; }}
+ *   props A props object containing the following properties:
+ *     - isNext: A boolean indicating whether the "Next" button should be disabled.
+ *     - isPrevious: A boolean indicating whether the "Previous" button should be disabled.
+ *     - nextPokemonList: A function to call when the "Next" button is clicked.
+ *     - previousPokemonList: A function to call when the "Previous" button is clicked.
  *
- * @returns {JSX.Element} A JSX element containing "Previous" and "Next" buttons for pagination.
- * The buttons are styled and disabled based on the availability of the next or previous pages.
+ * @returns A JSX element representing the pagination component.
+ *
+ * The component renders two buttons, "Previous" and "Next", with the specified properties.
+ * The "Previous" button is disabled if `isPrevious` is true, and the "Next" button is disabled if
+ * `isNext` is true. The component also styles the buttons with a blue color scheme.
 */
 const Pagination: React.FC<PaginationProps> = ({ isNext, isPrevious, nextPokemonList, previousPokemonList }) => {
-
   //RENDER
   return (
     <div className="flex justify-center gap-4 my-6">
@@ -35,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({ isNext, isPrevious, nextPokemon
       </button>
       <button
         onClick={nextPokemonList}
-        disabled={isNext} 
+        disabled={isNext}
         className={`px-5 py-2 rounded-lg text-white font-semibold transition duration-300 ${
           isNext ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
         }`}
