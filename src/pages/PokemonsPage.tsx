@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import usePokemonContext from '../hooks/usePokemonContext';
 import PokemonsList from '../components/list/PokemonsList';
 import Pagination from '../components/list/Pagination';
+import Spinner from '../components/loading/Spinner';
 
 const LIMIT = 21;
 
@@ -20,6 +21,7 @@ const LIMIT = 21;
 const PokemonsPage: React.FC = () => {
   //HOOKS
   const [offset, setOffset] = useState(0);
+  const [isLoadingNext, setIsLoadingNext] = useState(false);
   const { setPokemons, nextPage, prevPage, currentPage, totalPages } = usePokemonContext();
 
   const { data, isLoading, error } = useQuery({
@@ -32,6 +34,7 @@ const PokemonsPage: React.FC = () => {
   useEffect(() => {
     if (data?.pokemons) {
       setPokemons(data.pokemons);
+      setIsLoadingNext(false);
     }
   }, [data, setPokemons]);
 
@@ -45,6 +48,7 @@ const PokemonsPage: React.FC = () => {
     if (currentPage < totalPages) {
       nextPage();
     } else {
+      setIsLoadingNext(true);
       setOffset((prev) => prev + LIMIT);
     }
   };
@@ -67,11 +71,18 @@ const PokemonsPage: React.FC = () => {
 
 
   //RENDER
+
+  if(error) {
+    return (
+      <div className='text-center'>
+        <h1>Error loading data</h1>
+        <p>{error.message}</p>
+      </div>
+    )
+  }
+
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error loading data</p>}
-
       <div className="bg-gradient-to-r from-gray-500 to-dark-600 py-4 shadow-md">
         <h1 className="text-3xl font-bold text-white text-center">
           Pokémon List 🚀
@@ -79,7 +90,14 @@ const PokemonsPage: React.FC = () => {
       </div>
 
       <div>
-        <PokemonsList />
+      {
+        isLoading ? 
+          <Spinner />
+        : 
+          <PokemonsList  
+            loadingNextPokemons={isLoadingNext}
+          />
+      }
       </div>
 
       <Pagination

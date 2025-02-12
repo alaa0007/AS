@@ -5,6 +5,7 @@ import PokemonsPage from './pages/PokemonsPage';
 //STYLES
 import './App.css';
 import { PokemonsProvider } from './context/Pokemons';
+import ErrorBoundary from './components/error/ErrorBoundary';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -21,7 +22,9 @@ function App() {
   return (
     <PokemonsProvider>      
       <QueryClientProvider client={queryClient}>
+      <ErrorBoundary> 
         <PokemonsPage />
+      </ErrorBoundary>
       </QueryClientProvider>
     </PokemonsProvider>
   )

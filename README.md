@@ -49,3 +49,7 @@ export default tseslint.config({
 })
 ```
 # AS
+
+Clone the Project then 
+npm i 
+npm run dev
